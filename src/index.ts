@@ -34,6 +34,7 @@ import { IMenuItem } from "siyuan/types";
 
 
 import { SettingUtils } from "./libs/setting-utils";
+import { GitConfigDialog } from "./components/GitConfigDialog";
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
@@ -63,6 +64,16 @@ export default class PluginSample extends Plugin {
 
     async onload() {
         this.data[STORAGE_NAME] = { readonlyText: "Readonly" };
+        
+        // 加载已保存的 Git 同步配置
+        try {
+            const gitSyncConfig = await this.loadData('gitSyncConfig');
+            if (gitSyncConfig) {
+                this.data.gitSyncConfig = gitSyncConfig;
+            }
+        } catch (error) {
+            console.error("Error loading gitSyncConfig:", error);
+        }
 
         console.log("loading plugin-sample", this.i18n);
 
@@ -321,7 +332,7 @@ export default class PluginSample extends Plugin {
             ],
         };
 
-        console.log(this.i18n.helloPlugin);
+        console.log(this.i18n.usePlugin);
     }
 
     onLayoutReady() {
@@ -330,19 +341,7 @@ export default class PluginSample extends Plugin {
             title: this.i18n.addTopBarIcon,
             position: "right",
             callback: () => {
-                if (this.isMobile) {
-                    this.addMenu();
-                } else {
-                    let rect = topBarElement.getBoundingClientRect();
-                    // 如果被隐藏，则使用更多按钮
-                    if (rect.width === 0) {
-                        rect = document.querySelector("#barMore").getBoundingClientRect();
-                    }
-                    if (rect.width === 0) {
-                        rect = document.querySelector("#barPlugins").getBoundingClientRect();
-                    }
-                    this.addMenu(rect);
-                }
+                GitConfigDialog.showGitConfigDialog(this);
             }
         });
 
@@ -365,19 +364,18 @@ export default class PluginSample extends Plugin {
         });
         // this.loadData(STORAGE_NAME);
         this.settingUtils.load();
-        console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
-        console.log(
-            "Official settings value calling example:\n" +
-            this.settingUtils.get("InputArea") + "\n" +
-            this.settingUtils.get("Slider") + "\n" +
-            this.settingUtils.get("Select") + "\n"
-        );
+        // console.log(`frontend: ${getFrontend()}; backend: ${getBackend()}`);
+        // console.log(
+        //     "Official settings value calling example:\n" +
+        //     this.settingUtils.get("InputArea") + "\n" +
+        //     this.settingUtils.get("Slider") + "\n" +
+        //     this.settingUtils.get("Select") + "\n"
+        // );
     }
 
     async onunload() {
-        console.log(this.i18n.byePlugin);
+        console.log(this.i18n.banPlugin);
         showMessage("Goodbye SiYuan Plugin");
-        console.log("onunload");
     }
 
     uninstall() {
