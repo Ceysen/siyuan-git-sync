@@ -1,0 +1,58 @@
+/* GitConfigDialog 组件样式 */
+
+.dialogContent {
+  padding: 20px;
+}
+
+.formItem {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.required {
+  color: #ff4d4f;
+}
+
+.input {
+  width: 100%;
+}
+
+.helperText {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.buttonGroup {
+  margin-top: 24px;
+  text-align: right;
+}
+
+.button {
+  margin-right: 8px;
+}
+
+.autoSyncSection {
+  margin-bottom: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+  .dialogContent {
+    padding: 16px;
+  }
+  
+  .buttonGroup {
+    margin-top: 20px;
+  }
+  
+  .button {
+    margin-right: 4px;
+    padding: 4px 8px;
+  }
+}

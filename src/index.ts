@@ -34,7 +34,7 @@ import { IMenuItem } from "siyuan/types";
 
 
 import { SettingUtils } from "./libs/setting-utils";
-import { GitConfigDialog } from "./components/GitConfigDialog";
+import { GitConfigDialog } from "@/components/GitConfigDialog";
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
@@ -75,16 +75,15 @@ export default class PluginSample extends Plugin {
             console.error("Error loading gitSyncConfig:", error);
         }
 
-        console.log("loading plugin-sample", this.i18n);
+
 
         const frontEnd = getFrontend();
         this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
         // 图标的制作参见帮助文档
-        this.addIcons(`<symbol id="iconFace" viewBox="0 0 32 32">
-<path d="M13.667 17.333c0 0.92-0.747 1.667-1.667 1.667s-1.667-0.747-1.667-1.667 0.747-1.667 1.667-1.667 1.667 0.747 1.667 1.667zM20 15.667c-0.92 0-1.667 0.747-1.667 1.667s0.747 1.667 1.667 1.667 1.667-0.747 1.667-1.667-0.747-1.667-1.667-1.667zM29.333 16c0 7.36-5.973 13.333-13.333 13.333s-13.333-5.973-13.333-13.333 5.973-13.333 13.333-13.333 13.333 5.973 13.333 13.333zM14.213 5.493c1.867 3.093 5.253 5.173 9.12 5.173 0.613 0 1.213-0.067 1.787-0.16-1.867-3.093-5.253-5.173-9.12-5.173-0.613 0-1.213 0.067-1.787 0.16zM5.893 12.627c2.28-1.293 4.040-3.4 4.88-5.92-2.28 1.293-4.040 3.4-4.88 5.92zM26.667 16c0-1.040-0.16-2.040-0.44-2.987-0.933 0.2-1.893 0.32-2.893 0.32-4.173 0-7.893-1.92-10.347-4.92-1.4 3.413-4.187 6.093-7.653 7.4 0.013 0.053 0 0.12 0 0.187 0 5.88 4.787 10.667 10.667 10.667s10.667-4.787 10.667-10.667z"></path>
-</symbol>
-<symbol id="iconSaving" viewBox="0 0 32 32">
-<path d="M20 13.333c0-0.733 0.6-1.333 1.333-1.333s1.333 0.6 1.333 1.333c0 0.733-0.6 1.333-1.333 1.333s-1.333-0.6-1.333-1.333zM10.667 12h6.667v-2.667h-6.667v2.667zM29.333 10v9.293l-3.76 1.253-2.24 7.453h-7.333v-2.667h-2.667v2.667h-7.333c0 0-3.333-11.28-3.333-15.333s3.28-7.333 7.333-7.333h6.667c1.213-1.613 3.147-2.667 5.333-2.667 1.107 0 2 0.893 2 2 0 0.28-0.053 0.533-0.16 0.773-0.187 0.453-0.347 0.973-0.427 1.533l3.027 3.027h2.893zM26.667 12.667h-1.333l-4.667-4.667c0-0.867 0.12-1.72 0.347-2.547-1.293 0.333-2.347 1.293-2.787 2.547h-8.227c-2.573 0-4.667 2.093-4.667 4.667 0 2.507 1.627 8.867 2.68 12.667h2.653v-2.667h8v2.667h2.68l2.067-6.867 3.253-1.093v-4.707z"></path>
+        this.addIcons(`
+<symbol id="iconGitSync" viewBox="0 0 32 32">
+<path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm-4.5 14.5c0 0.828-0.672 1.5-1.5 1.5s-1.5-0.672-1.5-1.5 0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5zm9 0c0 0.828-0.672 1.5-1.5 1.5s-1.5-0.672-1.5-1.5 0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5zm-4.5-9c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5z"></path>
+<path d="M12.5 18.5c-0.276 0-0.5-0.224-0.5-0.5s0.224-0.5 0.5-0.5 0.5 0.224 0.5 0.5-0.224 0.5-0.5 0.5zm6 0c-0.276 0-0.5-0.224-0.5-0.5s0.224-0.5 0.5-0.5 0.5 0.224 0.5 0.5-0.224 0.5-0.5 0.5zm-3-5c-0.276 0-0.5-0.224-0.5-0.5s0.224-0.5 0.5-0.5 0.5 0.224 0.5 0.5-0.224 0.5-0.5 0.5z"></path>
 </symbol>`);
 
         this.custom = this.addTab({
@@ -93,10 +92,10 @@ export default class PluginSample extends Plugin {
                 this.element.innerHTML = `<div class="plugin-sample__custom-tab">${this.data.text}</div>`;
             },
             beforeDestroy() {
-                console.log("before destroy tab:", TAB_TYPE);
+
             },
             destroy() {
-                console.log("destroy tab:", TAB_TYPE);
+
             }
         });
 
@@ -112,7 +111,7 @@ export default class PluginSample extends Plugin {
             langKey: "getTab",
             hotkey: "⇧⌘M",
             globalCallback: () => {
-                console.log(this.getOpenedTab());
+
             },
         });
 
@@ -129,10 +128,10 @@ export default class PluginSample extends Plugin {
             },
             type: DOCK_TYPE,
             resize() {
-                console.log(DOCK_TYPE + " resize");
+
             },
             update() {
-                console.log(DOCK_TYPE + " update");
+
             },
             init: (dock) => {
                 if (this.isMobile) {
@@ -161,7 +160,7 @@ export default class PluginSample extends Plugin {
                 }
             },
             destroy() {
-                console.log("destroy dock:", DOCK_TYPE);
+
             }
         });
 
@@ -179,7 +178,7 @@ export default class PluginSample extends Plugin {
                 callback: () => {
                     // Return data and save it in real time
                     let value = this.settingUtils.takeAndSave("Input");
-                    console.log(value);
+
                 }
             }
         });
@@ -194,7 +193,7 @@ export default class PluginSample extends Plugin {
                 callback: () => {
                     // Read data in real time
                     let value = this.settingUtils.get("InputArea");
-                    console.log(value);
+
                 }
             }
         });
@@ -209,7 +208,7 @@ export default class PluginSample extends Plugin {
                     // Return data and save it in real time
                     let value = !this.settingUtils.get("Check");
                     this.settingUtils.set("Check", value);
-                    console.log(value);
+
                 }
             }
         });
@@ -227,7 +226,7 @@ export default class PluginSample extends Plugin {
                 callback: () => {
                     // Read data in real time
                     let value = this.settingUtils.get("Select");
-                    console.log(value);
+
                 }
             }
         });
@@ -246,8 +245,7 @@ export default class PluginSample extends Plugin {
             action: {
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.take("Slider");
-                    console.log(value);
+                    this.settingUtils.take("Slider");
                 }
             }
         });
@@ -337,7 +335,7 @@ export default class PluginSample extends Plugin {
 
     onLayoutReady() {
         const topBarElement = this.addTopBar({
-            icon: "iconFace",
+            icon: "iconGitSync",
             title: this.i18n.addTopBarIcon,
             position: "right",
             callback: () => {
@@ -375,11 +373,10 @@ export default class PluginSample extends Plugin {
 
     async onunload() {
         console.log(this.i18n.banPlugin);
-        showMessage("Goodbye SiYuan Plugin");
     }
 
     uninstall() {
-        console.log("uninstall");
+
     }
 
     async updateCards(options: ICardData) {
@@ -405,6 +402,8 @@ export default class PluginSample extends Plugin {
     }
 
     private eventBusLog({ detail }: any) {
+        console.log(detail);
+        console.log(detail);
         console.log(detail);
     }
 
@@ -523,7 +522,7 @@ export default class PluginSample extends Plugin {
                             id: this.name + TAB_TYPE
                         },
                     });
-                    console.log(tab);
+
                 }
             });
             menu.addItem({
@@ -536,7 +535,7 @@ export default class PluginSample extends Plugin {
                             path: "assets/paragraph-20210512165953-ag1nib4.svg"
                         }
                     });
-                    console.log(tab);
+
                 }
             });
             menu.addItem({
@@ -549,7 +548,7 @@ export default class PluginSample extends Plugin {
                             id: this.getEditor().protyle.block.rootID,
                         }
                     });
-                    console.log(tab);
+
                 }
             });
             menu.addItem({
@@ -562,7 +561,7 @@ export default class PluginSample extends Plugin {
                             k: "SiYuan"
                         }
                     });
-                    console.log(tab);
+
                 }
             });
             menu.addItem({
@@ -575,7 +574,7 @@ export default class PluginSample extends Plugin {
                             type: "all"
                         }
                     });
-                    console.log(tab);
+
                 }
             });
             menu.addItem({
@@ -985,5 +984,12 @@ export default class PluginSample extends Plugin {
             return;
         }
         return editors[0];
+    }
+
+    /**
+     * 重写 openSetting 方法，显示自定义的 Git 配置对话框
+     */
+    openSetting() {
+        GitConfigDialog.showGitConfigDialog(this);
     }
 }

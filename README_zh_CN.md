@@ -1,240 +1,193 @@
-
-# 使用 vite + svelte 的思源笔记插件示例
+# SiYuan Git Sync 插件
 
 [English](./README.md)
 
+## 项目简介
 
-> 本例同 [siyuan/plugin-sample](https://github.com/siyuan-note/plugin-sample) [v0.4.1](https://github.com/siyuan-note/plugin-sample/tree/v0.4.1)
- 
-1. 使用 vite 打包
-2. 使用符号链接、而不是把项目放到插件目录下的模式进行开发
-3. 提供一个github action 模板，能自动生成package.zip并上传到新版本中
+SiYuan Git Sync 是一个专为思源笔记设计的 Git 同步插件，支持将笔记内容自动或手动同步到 GitHub 仓库，实现笔记的版本控制和多设备同步。
 
-## 开始
+## 功能特性
 
-1. 通过 <kbd>Use this template</kbd> 按钮将该库文件复制到你自己的库中，请注意库名和插件名称一致，默认分支必须为 `main`
-2. 将你的库克隆到本地开发文件夹中
-    * 注意: 同 `plugin-sample` 不同, 本样例并不推荐直接把代码下载到 `{workspace}/data/plugins/`
-3. 安装 [NodeJS](https://nodejs.org/en/download) 和 [pnpm](https://pnpm.io/installation)，然后在开发文件夹下执行 `pnpm i` 安装所需要的依赖
-4. 运行 `pnpm run make-link` 命令创建符号链接 (Windows 下的开发者请参阅下方「Windows 下的 make-link」小节)
-5. 执行 `pnpm run dev` 进行实时编译
-6.  在思源中打开集市并在下载选项卡中启用插件
+- **GitHub 仓库同步**：支持将笔记同步到指定的 GitHub 仓库
+- **自动/手动同步模式**：可选择自动定时同步或手动触发同步
+- **覆盖本地功能**：支持将本地文件完全替换为仓库中的版本
+- **多目录同步**：支持同时同步多个笔记目录
+- **自定义提交信息**：支持使用模板和日期占位符自定义提交信息
+- **自动关闭对话框**：执行同步或覆盖操作后可自动关闭配置页面
+- **友好的用户界面**：提供直观的配置界面和操作反馈
 
-> [!TIP]
-> 你也可以使用我们维护的 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 命令行工具，在本地终端中直接构建插件。
-> 
-> 此外，对于本插件以下提及到的 `make-link` 相关的命令，后续所有更新将在 [siyuan-plugin-cli](https://www.npmjs.com/package/siyuan-plugin-cli) 中进行。
-> 
-> 模板内置的 `make-link` 脚本也可能会在未来某个版本中移除，转而使用 `siyuan-plugin-cli` 工具，意在简化同时维护多个插件模板的工作量。
+## 安装方法
 
-### 设置 make-link 命令的目标目录
+### 方法一：从集市安装
 
-make-link 命令会创建符号链接将你的 `dev` 目录绑定到思源的插件目录下。你可以有三种方式来配置目标的思源工作空间并创建符号链接:
+1. 打开思源笔记
+2. 进入「集市」→「插件」
+3. 搜索「Git Sync」并点击「安装」
+4. 安装完成后点击「启用」
 
-1. **选择工作空间**
-    - 打开思源笔记, 确保思源内核正在运行
-    - 运行 `pnpm run make-link`, 脚本会自动检测所有思源的工作空间, 请在命令行中手动输入序号以选择工作空间
-        ```bash
-        >>> pnpm run make-link
-        > plugin-sample-vite@0.0.3 make-link H:\SrcCode\开源项目\plugin-sample-vite
-        > node  --no-warnings ./scripts/make_dev_link.js
+### 方法二：手动安装
 
-        "targetDir" is empty, try to get SiYuan directory automatically....
-        Got 2 SiYuan workspaces
-        [0] H:\Media\SiYuan
-        [1] H:\临时文件夹\SiYuanDevSpace
-        Please select a workspace[0-1]: 0
-        Got target directory: H:\Media\SiYuan/data/plugins
-        Done! Created symlink H:\Media\SiYuan/data/plugins/plugin-sample-vite
-        ```
-2. **手动配置目标目录**
-    - 打开 `./scripts/make_dev_link.js` 文件，更改 `targetDir` 为思源的插件目录 `<siyuan workspace>/data/plugins`
-    - 运行 `pnpm run make-link` 命令, 如果看到类似以下的消息，说明创建成功:
+1. 从 [GitHub Releases](https://github.com/yourusername/siyuan-git-sync/releases) 下载最新的 `package.zip` 文件
+2. 将下载的文件解压到思源笔记的插件目录 `{workspace}/data/plugins/`
+3. 重启思源笔记
+4. 进入「设置」→「插件」启用该插件
 
-3. **设置环境变量创建符号链接**
-    - 设置系统的环境变量 `SIYUAN_PLUGIN_DIR` 为 `工作空间/data/plugins` 的路径
+## 使用指南
 
+### 配置 Git 同步
 
-### Windows 下的 make-link
+1. 点击思源笔记顶部栏右侧的插件图标（可选择固定到顶部栏），在下方找到本插件
 
-由于思源升级了 Go 1.23，旧版创建的 junction link 在 windows 下无法被正常识别，故而改为创建 `dir` 符号链接。
+2. 在弹出的配置对话框中填写以下信息：
 
-> https://github.com/siyuan-note/siyuan/issues/12399
+   - **GitHub 仓库地址**：填写你的 GitHub 仓库 HTTPS 地址（例如：`https://github.com/username/repo.git`）
+   - **分支名称**：填写你要同步的分支名称（例如：`main`）
+   - **Personal Access Token**：填写你的 GitHub Personal Access Token，需要有 push 权限
+   - **默认 Commit 信息模板**：填写提交信息模板，可使用 `{{date}}` 占位符自动生成日期
+   - **笔记目录**：填写要同步的笔记目录，多个目录用英文逗号分隔
+   - **同步模式**：选择「自动同步」或「手动同步」
+   - **自动同步间隔**：当选择自动同步时，设置同步间隔（分钟）
+   - **点击同步或覆盖后自动关闭页面**：勾选后操作完成会自动关闭配置页面
 
+3. 点击「保存配置」按钮保存设置
 
-不过 Windows 下使用 NodeJs 创建目录符号链接可能需要管理员权限，你可以有如下几种选择:
+### 手动同步
 
-1. 在具有管理员权限的命令行中运行 `pnpm run make-link`
-2. 配置 Windows 设置，在 [系统设置-更新与安全-开发者模式] 中启用开发者模式，然后再运行 `pnpm run make-link`
-3. 运行 `pnpm run make-link-win`，该命令会使用一个 powershell 脚本来寻求管理员权限，需要在系统中开启 PowerShell 脚本执行权限
+在手动同步模式下：
 
+1. 打开 Git 同步配置对话框
+2. 点击「手动同步」按钮开始同步
+3. 等待同步完成，会显示同步结果
 
-## 国际化
+### 覆盖本地
 
-国际化方面我们主要考虑的是支持多语言，具体需要完成以下工作：
+当需要将本地文件替换为仓库中的版本时：
 
-* 插件自身的元信息，比如插件描述和自述文件
-  * plugin.json 中的 `description` 和 `readme` 字段，以及对应的 README*.md 文件
-* 插件中使用的文本，比如按钮文字和提示信息
-  * public/i18n/*.json 语言配置文件
-  * 代码中使用 `this.i18.key` 获取文本
-* 最后在 plugin.json 中的 `i18n` 字段中声明该插件支持的语言
-* yaml 支持
-  * 本模板特别支持基于 Yaml 语法的 I18n，见 `public/i18n/zh_CN.yaml`
-  * 编译时，会自动把定义的 yaml 文件翻译成 json 文件放到 dist 或 dev 目录下
+1. 打开 Git 同步配置对话框
+2. 点击「覆盖本地」按钮
+3. 阅读警告信息并确认操作
+4. 等待覆盖完成，会显示覆盖结果
 
-建议插件至少支持英文和简体中文，这样可以方便更多人使用。
+## 配置说明
 
-## plugin.json
+### 必选配置项
 
-```json
-{
-  "name": "plugin-sample-vite",
-  "author": "frostime",
-  "url": "https://github.com/frostime/plugin-sample-vite",
-  "version": "0.1.3",
-  "minAppVersion": "2.8.8",
-  "backends": ["windows", "linux", "darwin"],
-  "frontends": ["desktop"],
-  "displayName": {
-    "en_US": "Plugin sample with vite and svelte",
-    "zh_CN": "插件样例 vite + svelte 版"
-  },
-  "description": {
-    "en_US": "SiYuan plugin sample with vite and svelte",
-    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
-  },
-  "readme": {
-    "en_US": "README_en_US.md",
-    "zh_CN": "README.md"
-  },
-  "funding": {
-    "openCollective": "",
-    "patreon": "",
-    "github": "",
-    "custom": [
-      "https://ld246.com/sponsor"
-    ]
-  },
-  "keywords": [
-    "sample", "示例"
-  ]
-}
-```
+| 配置项 | 说明 | 示例 |
+|-------|------|------|
+| GitHub 仓库地址 | 要同步的 GitHub 仓库 HTTPS 地址 | `https://github.com/username/repo.git` |
+| 分支名称 | 要同步的仓库分支 | `main` |
+| Personal Access Token | GitHub 个人访问令牌，需要有 push 权限 | `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` |
+| 默认 Commit 信息模板 | 提交信息模板，支持 `{{date}}` 占位符 | `同步笔记更新：{{date}}` |
+| 笔记目录 | 要同步的笔记目录，多个目录用英文逗号分隔 | `20260101104218-ma2fdmz` 或 `20260101104218-ma2fdmz,20260102104218-xyz123` |
 
-* `name`：插件名称，必须和库名一致，且全局唯一（集市中不能有重名插件）
-* `author`：插件作者名
-* `url`：插件仓库地址
-* `version`：插件版本号，建议遵循 [semver](https://semver.org/lang/zh-CN/) 规范
-* `minAppVersion`：插件支持的最低思源笔记版本号
-* `backends`：插件需要的后端环境，可选值为 `windows`, `linux`, `darwin`, `docker`, `android`, `ios` and `all`
-  * `windows`：Windows 桌面端
-  * `linux`：Linux 桌面端
-  * `darwin`：macOS 桌面端
-  * `docker`：Docker 端
-  * `android`：Android 端
-  * `ios`：iOS 端
-  * `all`：所有环境
-* `frontends`：插件需要的前端环境，可选值为 `desktop`, `desktop-window`, `mobile`, `browser-desktop`, `browser-mobile` and `all`
-  * `desktop`：桌面端
-  * `desktop-window`：桌面端页签转换的独立窗口
-  * `mobile`：移动端
-  * `browser-desktop`：桌面端浏览器
-  * `browser-mobile`：移动端浏览器
-  * `all`：所有环境
-* `displayName`：模板显示名称，主要用于模板集市列表中显示，支持多语言
-  * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `description`：插件描述，主要用于插件集市列表中显示，支持多语言
-  * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `readme`：自述文件名，主要用于插件集市详情页中显示，支持多语言
-  * `default`：默认语言，必须存在
-  * `zh_CN`、`en_US` 等其他语言：可选，建议至少提供中文和英文
-* `funding`：插件赞助信息
-  * `openCollective`：Open Collective 名称
-  * `patreon`：Patreon 名称
-  * `github`：GitHub 登录名
-  * `custom`：自定义赞助链接列表
-* `keywords`：搜索关键字列表，用于集市搜索功能
+### 可选配置项
 
-## 打包
+| 配置项 | 说明 | 默认值 |
+|-------|------|--------|
+| 同步模式 | 选择同步模式：自动或手动 | `manual` |
+| 自动同步间隔 | 自动同步的时间间隔（分钟） | - |
+| 点击同步或覆盖后自动关闭页面 | 操作完成后是否自动关闭配置页面 | `false` |
 
-无论使用何种方式编译打包，我们最终需要生成一个 package.zip，它至少包含如下文件：
+## 注意事项
 
-* i18n/*
-* icon.png (160*160)
-* index.css
-* index.js
-* plugin.json
-* preview.png (1024*768)
-* README*.md
+1. **关于 Personal Access Token**：
+   - 需要在 GitHub 设置中创建个人访问令牌
+   - 创建时需要勾选 `repo` 权限
+   - 请妥善保管你的访问令牌，不要分享给他人
 
-## 上架集市
+2. **关于自动同步**：
+   - 为避免笔记内容冲突，建议只在单台电脑上启用自动同步
+   - 如果在多台设备上同时开启自动同步，可能会导致同步冲突和数据丢失
 
-* 执行 `pnpm run build` 生成 package.zip
-* 在 GitHub 上创建一个新的发布，使用插件版本号作为 “Tag
-  version”，示例 https://github.com/siyuan-note/plugin-sample/releases
-* 上传 package.zip 作为二进制附件
-* 提交发布
+3. **关于覆盖本地**：
+   - 覆盖本地操作会将本地文件完全替换为仓库中的版本
+   - 所有本地修改将会丢失，请确保已备份重要数据
+   - 此操作不可逆，请谨慎使用
 
-如果是第一次发布版本，还需要创建一个 PR 到 [Community Bazaar](https://github.com/siyuan-note/bazaar) 社区集市仓库，修改该库的
-plugins.json。该文件是所有社区插件库的索引，格式为：
+4. **关于同步目录**：
+   - 插件会自动添加 `/data/` 前缀到配置的目录路径
+   - 会默认检查并提交 `assets` 文件夹
 
-```json
-{
-  "repos": [
-    "username/reponame"
-  ]
-}
-```
+## 常见问题
 
-PR 被合并以后集市会通过 GitHub Actions 自动更新索引并部署。后续发布新版本插件时只需要按照上述步骤创建新的发布即可，不需要再
-PR 社区集市仓库。
+### Q: 同步失败怎么办？
 
-正常情况下，社区集市仓库每隔 1 小时会自动更新索引并部署，可在 https://github.com/siyuan-note/bazaar/actions 查看部署状态。
+**A:** 请检查以下几点：
+- GitHub 仓库地址是否正确
+- Personal Access Token 是否有效且有 push 权限
+- 网络连接是否正常
+- 笔记目录是否存在且格式正确
 
-## 使用 Github action 自动发布
+### Q: 自动同步不工作怎么办？
 
-样例中自带了 github action，可以自动打包发布，请遵循以下操作：
+**A:** 请检查以下几点：
+- 是否选择了「自动同步」模式
+- 是否设置了大于 0 的同步间隔
+- 思源笔记是否一直在运行（后台运行也可以）
+- 网络连接是否稳定
 
-1. 设置项目 `https://github.com/OWNER/REPO/settings/actions` 页面向下划到 **Workflow Permissions**，打开配置
+### Q: 覆盖本地后笔记丢失怎么办？
 
-    ![](asset/action.png)
+**A:** 覆盖本地操作是不可逆的，建议：
+- 在执行覆盖操作前备份重要笔记
+- 如果已经执行了覆盖操作，可以尝试从 GitHub 仓库的历史提交中恢复
 
-2. 需要发布版本的时候，push 一个格式为 `v*` 的 tag，github 就会自动打包发布 release（包括 package.zip）
+## 开发指南
 
-3. 默认使用保守策略进行 pre-release 发布，如果觉得没有必要，可以更改 release.yml 中的设置：
+### 环境要求
 
-    ```yaml
-    - name: Release
-        uses: ncipollo/release-action@v1
-        with:
-            allowUpdates: true
-            artifactErrorsFailBuild: true
-            artifacts: 'package.zip'
-            token: ${{ secrets.GITHUB_TOKEN }}
-            prerelease: true # 把这个改为 false
-    ```
+- Node.js 16.0+
+- pnpm 7.0+
 
+### 开发步骤
 
-## 开发者须知
+1. 克隆项目到本地
+   ```bash
+   git clone https://github.com/Ceysen/Siyuan-Git-Sync.git
+   cd siyuan-git-sync
+   ```
 
-思源开发者需注意以下规范。
+2. 安装依赖
+   ```bash
+   pnpm install
+   ```
 
-### 1. 读写文件规范
+3. 创建符号链接
+   ```bash
+   pnpm run make-link
+   ```
+   > Windows 用户请运行 `pnpm run make-link-win`
 
-插件或者外部扩展如果有直接读取或者写入 data 下文件的需求，请通过调用内核 API 来实现，**不要自行调用 `fs` 或者其他 electron、nodejs API**，否则可能会导致数据同步时分块丢失，造成云端数据损坏。
+4. 启动开发服务器
+   ```bash
+   pnpm run dev
+   ```
 
-相关 API 见 `/api/file/*`（例如 `/api/file/getFile` 等）。
+5. 构建生产版本
+   ```bash
+   pnpm run build
+   ```
 
-### 2. Daily Note 属性规范
+## 贡献指南
 
-思源在创建日记的时候会自动为文档添加 custom-dailynote-yyyymmdd 属性，以方便将日记文档同普通文档区分。
+欢迎提交 Issue 和 Pull Request 来帮助改进这个插件！
 
-> 详情请见 [Github Issue #9807](https://github.com/siyuan-note/siyuan/issues/9807)。
+### 提交 PR 前请确保：
 
-开发者在开发手动创建 Daily Note 的功能时请注意：
+1. 代码符合项目的代码风格
+2. 运行了 `pnpm run build` 确保构建成功
+3. 测试了功能是否正常工作
+4. 更新了相关的文档（如果需要）
 
-* 如果调用了 `/api/filetree/createDailyNote` 创建日记，那么文档会自动添加这个属性，无需开发者特别处理
-* 如果是开发者代码手动创建文档（例如使用 `createDocWithMd` API 创建日记），请手动为文档添加该属性
+## 许可证
+
+本项目采用 [MIT License](./LICENSE) 开源协议。
+
+## 联系方式
+
+- GitHub: [Ceysen/siyuan-git-sync](https://github.com/Ceysen/Siyuan-Git-Sync.git)
+- 问题反馈：[Issues](https://github.com/Ceysen/Siyuan-Git-Sync/issues)
+
+---
+
+**感谢使用 SiYuan Git Sync 插件！** 希望它能帮助你更好地管理和同步你的笔记。
