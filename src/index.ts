@@ -3,31 +3,14 @@ import {
     showMessage,
     confirm,
     Dialog,
-    Menu,
-    openTab,
     adaptHotkey,
     getFrontend,
-    getBackend,
-    // Setting,
-    // fetchPost,
     Protyle,
-    openWindow,
-    IOperation,
     Constants,
-    openMobileFileById,
-    lockScreen,
     ICard,
     ICardData,
-    Custom,
-    exitSiYuan,
-    getModelByDockType,
     getAllEditor,
-    Files,
-    platformUtils,
     fetchPost,
-    openSetting,
-    openAttributePanel,
-    saveLayout
 } from "siyuan";
 import "./index.scss";
 import { IMenuItem } from "siyuan/types";
@@ -36,14 +19,11 @@ import { IMenuItem } from "siyuan/types";
 import { SettingUtils } from "./libs/setting-utils";
 import { GitConfigDialog } from "@/components/GitConfigDialog";
 const STORAGE_NAME = "menu-config";
-const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
-    private custom: () => Custom;
     private isMobile: boolean;
-    private blockIconEventBindThis = this.blockIconEvent.bind(this);
     private settingUtils: SettingUtils;
 
 
@@ -85,19 +65,6 @@ export default class PluginSample extends Plugin {
 <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm-4.5 14.5c0 0.828-0.672 1.5-1.5 1.5s-1.5-0.672-1.5-1.5 0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5zm9 0c0 0.828-0.672 1.5-1.5 1.5s-1.5-0.672-1.5-1.5 0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5zm-4.5-9c1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5z"></path>
 <path d="M12.5 18.5c-0.276 0-0.5-0.224-0.5-0.5s0.224-0.5 0.5-0.5 0.5 0.224 0.5 0.5-0.224 0.5-0.5 0.5zm6 0c-0.276 0-0.5-0.224-0.5-0.5s0.224-0.5 0.5-0.5 0.5 0.224 0.5 0.5-0.224 0.5-0.5 0.5zm-3-5c-0.276 0-0.5-0.224-0.5-0.5s0.224-0.5 0.5-0.5 0.5 0.224 0.5 0.5-0.224 0.5-0.5 0.5z"></path>
 </symbol>`);
-
-        this.custom = this.addTab({
-            type: TAB_TYPE,
-            init() {
-                this.element.innerHTML = `<div class="plugin-sample__custom-tab">${this.data.text}</div>`;
-            },
-            beforeDestroy() {
-
-            },
-            destroy() {
-
-            }
-        });
 
         this.addCommand({
             langKey: "showDialog",
@@ -177,7 +144,7 @@ export default class PluginSample extends Plugin {
                 // Called when focus is lost and content changes
                 callback: () => {
                     // Return data and save it in real time
-                    let value = this.settingUtils.takeAndSave("Input");
+                    this.settingUtils.takeAndSave("Input");
 
                 }
             }
@@ -192,7 +159,7 @@ export default class PluginSample extends Plugin {
             action: {
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.get("InputArea");
+                    this.settingUtils.get("InputArea");
 
                 }
             }
@@ -225,7 +192,7 @@ export default class PluginSample extends Plugin {
             action: {
                 callback: () => {
                     // Read data in real time
-                    let value = this.settingUtils.get("Select");
+                    this.settingUtils.get("Select");
 
                 }
             }
@@ -334,7 +301,7 @@ export default class PluginSample extends Plugin {
     }
 
     onLayoutReady() {
-        const topBarElement = this.addTopBar({
+        this.addTopBar({
             icon: "iconGitSync",
             title: this.i18n.addTopBarIcon,
             position: "right",
@@ -392,44 +359,6 @@ export default class PluginSample extends Plugin {
         return options;
     }
 
-    private eventBusPaste(event: any) {
-        // 如果需异步处理请调用 preventDefault， 否则会进行默认处理
-        event.preventDefault();
-        // 如果使用了 preventDefault，必须调用 resolve，否则程序会卡死
-        event.detail.resolve({
-            textPlain: event.detail.textPlain.trim(),
-        });
-    }
-
-    private eventBusLog({ detail }: any) {
-        console.log(detail);
-        console.log(detail);
-        console.log(detail);
-    }
-
-    private blockIconEvent({ detail }: any) {
-        detail.menu.addItem({
-            id: "pluginSample_removeSpace",
-            iconHTML: "",
-            label: this.i18n.removeSpace,
-            click: () => {
-                const doOperations: IOperation[] = [];
-                detail.blockElements.forEach((item: HTMLElement) => {
-                    const editElement = item.querySelector('[contenteditable="true"]');
-                    if (editElement) {
-                        editElement.textContent = editElement.textContent.replace(/ /g, "");
-                        doOperations.push({
-                            id: item.dataset.nodeId,
-                            data: item.outerHTML,
-                            action: "update"
-                        });
-                    }
-                });
-                detail.protyle.getInstance().transaction(doOperations);
-            }
-        });
-    }
-
     private showDialog() {
         const dialog = new Dialog({
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
@@ -457,524 +386,6 @@ export default class PluginSample extends Plugin {
         fetchPost("/api/system/currentTime", {}, (response) => {
             dialog.element.querySelector("#time").innerHTML = new Date(response.data).toString();
         });
-    }
-
-
-    private addMenu(rect?: DOMRect) {
-        const menu = new Menu("topBarSample", () => {
-            console.log(this.i18n.byeMenu);
-        });
-        menu.addItem({
-            icon: "iconSettings",
-            label: "Open SiYuan Setting",
-            click: () => {
-                openSetting(this.app);
-            }
-        });
-        menu.addItem({
-            icon: "iconSettings",
-            label: "Open Plugin Setting",
-            click: () => {
-                this.openSetting();
-            }
-        });
-        menu.addSeparator();
-        menu.addItem({
-            icon: "iconDrag",
-            label: "Open Attribute Panel",
-            click: () => {
-                openAttributePanel({
-                    nodeElement: this.getEditor().protyle.wysiwyg.element.firstElementChild as HTMLElement,
-                    protyle: this.getEditor().protyle,
-                    focusName: "custom",
-                });
-            }
-        });
-        menu.addItem({
-            icon: "iconInfo",
-            label: "Dialog(open doc first)",
-            accelerator: this.commands[0].customHotkey,
-            click: () => {
-                this.showDialog();
-            }
-        });
-        menu.addItem({
-            icon: "iconFocus",
-            label: "Select Opened Doc(open doc first)",
-            click: () => {
-                (getModelByDockType("file") as Files).selectItem(this.getEditor().protyle.notebookId, this.getEditor().protyle.path);
-            }
-        });
-        if (!this.isMobile) {
-            menu.addItem({
-                icon: "iconFace",
-                label: "Open Custom Tab(open doc first)",
-                click: () => {
-                    const tab = openTab({
-                        app: this.app,
-                        custom: {
-                            icon: "iconFace",
-                            title: "Custom Tab",
-                            data: {
-                                // text: platformUtils.isHuawei() ? "Hello, Huawei!" : "This is my custom tab",
-                                blockID: this.getEditor().protyle.block.rootID,
-                            },
-                            id: this.name + TAB_TYPE
-                        },
-                    });
-
-                }
-            });
-            menu.addItem({
-                icon: "iconImage",
-                label: "Open Asset Tab(First open the Chinese help document)",
-                click: () => {
-                    const tab = openTab({
-                        app: this.app,
-                        asset: {
-                            path: "assets/paragraph-20210512165953-ag1nib4.svg"
-                        }
-                    });
-
-                }
-            });
-            menu.addItem({
-                icon: "iconFile",
-                label: "Open Doc Tab(open doc first)",
-                click: async () => {
-                    const tab = await openTab({
-                        app: this.app,
-                        doc: {
-                            id: this.getEditor().protyle.block.rootID,
-                        }
-                    });
-
-                }
-            });
-            menu.addItem({
-                icon: "iconSearch",
-                label: "Open Search Tab",
-                click: () => {
-                    const tab = openTab({
-                        app: this.app,
-                        search: {
-                            k: "SiYuan"
-                        }
-                    });
-
-                }
-            });
-            menu.addItem({
-                icon: "iconRiffCard",
-                label: "Open Card Tab",
-                click: () => {
-                    const tab = openTab({
-                        app: this.app,
-                        card: {
-                            type: "all"
-                        }
-                    });
-
-                }
-            });
-            menu.addItem({
-                icon: "iconLayout",
-                label: "Open Float Layer(open doc first)",
-                click: () => {
-                    this.addFloatLayer({
-                        refDefs: [{ refID: this.getEditor().protyle.block.rootID }],
-                        x: window.innerWidth - 768 - 120,
-                        y: 32,
-                        isBacklink: false
-                    });
-                }
-            });
-            menu.addItem({
-                icon: "iconOpenWindow",
-                label: "Open Doc Window(open doc first)",
-                click: () => {
-                    openWindow({
-                        doc: { id: this.getEditor().protyle.block.rootID }
-                    });
-                }
-            });
-        } else {
-            menu.addItem({
-                icon: "iconFile",
-                label: "Open Doc(open doc first)",
-                click: () => {
-                    openMobileFileById(this.app, this.getEditor().protyle.block.rootID);
-                }
-            });
-        }
-        menu.addItem({
-            icon: "iconLock",
-            label: "Lockscreen",
-            click: () => {
-                lockScreen(this.app);
-            }
-        });
-        menu.addItem({
-            icon: "iconQuit",
-            label: "Exit Application",
-            click: () => {
-                exitSiYuan();
-            }
-        });
-        menu.addItem({
-            icon: "iconDownload",
-            label: "Save Layout",
-            click: () => {
-                saveLayout(() => {
-                    showMessage("Layout saved");
-                });
-            }
-        });
-        menu.addItem({
-            icon: "iconScrollHoriz",
-            label: "Event Bus",
-            type: "submenu",
-            submenu: [{
-                icon: "iconSelect",
-                label: "On ws-main",
-                click: () => {
-                    this.eventBus.on("ws-main", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off ws-main",
-                click: () => {
-                    this.eventBus.off("ws-main", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On click-blockicon",
-                click: () => {
-                    this.eventBus.on("click-blockicon", this.blockIconEventBindThis);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off click-blockicon",
-                click: () => {
-                    this.eventBus.off("click-blockicon", this.blockIconEventBindThis);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On click-pdf",
-                click: () => {
-                    this.eventBus.on("click-pdf", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off click-pdf",
-                click: () => {
-                    this.eventBus.off("click-pdf", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On click-editorcontent",
-                click: () => {
-                    this.eventBus.on("click-editorcontent", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off click-editorcontent",
-                click: () => {
-                    this.eventBus.off("click-editorcontent", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On click-editortitleicon",
-                click: () => {
-                    this.eventBus.on("click-editortitleicon", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off click-editortitleicon",
-                click: () => {
-                    this.eventBus.off("click-editortitleicon", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On click-flashcard-action",
-                click: () => {
-                    this.eventBus.on("click-flashcard-action", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off click-flashcard-action",
-                click: () => {
-                    this.eventBus.off("click-flashcard-action", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-noneditableblock",
-                click: () => {
-                    this.eventBus.on("open-noneditableblock", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-noneditableblock",
-                click: () => {
-                    this.eventBus.off("open-noneditableblock", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On loaded-protyle-static",
-                click: () => {
-                    this.eventBus.on("loaded-protyle-static", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off loaded-protyle-static",
-                click: () => {
-                    this.eventBus.off("loaded-protyle-static", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On loaded-protyle-dynamic",
-                click: () => {
-                    this.eventBus.on("loaded-protyle-dynamic", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off loaded-protyle-dynamic",
-                click: () => {
-                    this.eventBus.off("loaded-protyle-dynamic", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On switch-protyle",
-                click: () => {
-                    this.eventBus.on("switch-protyle", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off switch-protyle",
-                click: () => {
-                    this.eventBus.off("switch-protyle", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On destroy-protyle",
-                click: () => {
-                    this.eventBus.on("destroy-protyle", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off destroy-protyle",
-                click: () => {
-                    this.eventBus.off("destroy-protyle", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-doctree",
-                click: () => {
-                    this.eventBus.on("open-menu-doctree", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-doctree",
-                click: () => {
-                    this.eventBus.off("open-menu-doctree", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-blockref",
-                click: () => {
-                    this.eventBus.on("open-menu-blockref", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-blockref",
-                click: () => {
-                    this.eventBus.off("open-menu-blockref", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-fileannotationref",
-                click: () => {
-                    this.eventBus.on("open-menu-fileannotationref", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-fileannotationref",
-                click: () => {
-                    this.eventBus.off("open-menu-fileannotationref", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-tag",
-                click: () => {
-                    this.eventBus.on("open-menu-tag", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-tag",
-                click: () => {
-                    this.eventBus.off("open-menu-tag", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-link",
-                click: () => {
-                    this.eventBus.on("open-menu-link", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-link",
-                click: () => {
-                    this.eventBus.off("open-menu-link", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-image",
-                click: () => {
-                    this.eventBus.on("open-menu-image", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-image",
-                click: () => {
-                    this.eventBus.off("open-menu-image", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-av",
-                click: () => {
-                    this.eventBus.on("open-menu-av", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-av",
-                click: () => {
-                    this.eventBus.off("open-menu-av", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-content",
-                click: () => {
-                    this.eventBus.on("open-menu-content", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-content",
-                click: () => {
-                    this.eventBus.off("open-menu-content", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-breadcrumbmore",
-                click: () => {
-                    this.eventBus.on("open-menu-breadcrumbmore", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-breadcrumbmore",
-                click: () => {
-                    this.eventBus.off("open-menu-breadcrumbmore", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-menu-inbox",
-                click: () => {
-                    this.eventBus.on("open-menu-inbox", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-menu-inbox",
-                click: () => {
-                    this.eventBus.off("open-menu-inbox", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On input-search",
-                click: () => {
-                    this.eventBus.on("input-search", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off input-search",
-                click: () => {
-                    this.eventBus.off("input-search", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On paste",
-                click: () => {
-                    this.eventBus.on("paste", this.eventBusPaste);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off paste",
-                click: () => {
-                    this.eventBus.off("paste", this.eventBusPaste);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-siyuan-url-plugin",
-                click: () => {
-                    this.eventBus.on("open-siyuan-url-plugin", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-siyuan-url-plugin",
-                click: () => {
-                    this.eventBus.off("open-siyuan-url-plugin", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On open-siyuan-url-block",
-                click: () => {
-                    this.eventBus.on("open-siyuan-url-block", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off open-siyuan-url-block",
-                click: () => {
-                    this.eventBus.off("open-siyuan-url-block", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On opened-notebook",
-                click: () => {
-                    this.eventBus.on("opened-notebook", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off opened-notebook",
-                click: () => {
-                    this.eventBus.off("opened-notebook", this.eventBusLog);
-                }
-            }, {
-                icon: "iconSelect",
-                label: "On closed-notebook",
-                click: () => {
-                    this.eventBus.on("closed-notebook", this.eventBusLog);
-                }
-            }, {
-                icon: "iconClose",
-                label: "Off closed-notebook",
-                click: () => {
-                    this.eventBus.off("closed-notebook", this.eventBusLog);
-                }
-            }]
-        });
-        menu.addSeparator();
-        menu.addItem({
-            icon: "iconSparkles",
-            label: this.data[STORAGE_NAME].readonlyText || "Readonly",
-            type: "readonly",
-        });
-        if (this.isMobile) {
-            menu.fullscreen();
-        } else {
-            menu.open({
-                x: rect.right,
-                y: rect.bottom,
-                isLeft: true,
-            });
-        }
     }
 
     private getEditor() {
