@@ -11,15 +11,15 @@
     "desktop"
   ],
   "displayName": {
-    "en_US": "Siyuan Git Sync",
+    "default": "Siyuan Git Sync",
     "zh_CN": "Git同步"
   },
   "description": {
-    "en_US": "Sync your SiYuan notes with Git",
+    "default": "Sync your SiYuan notes with Git",
     "zh_CN": "将思源笔记与 Git 同步"
   },
   "readme": {
-    "en_US": "README.md",
+    "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
   "funding": {
