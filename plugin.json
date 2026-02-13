@@ -1,7 +1,7 @@
 {
   "name": "siyuan-git-sync",
   "author": "ceysen",
-  "url": "https://github.com/Ceysen/Siyuan-Git-Sync",
+  "url": "https://github.com/Ceysen/siyuan-git-sync",
   "version": "0.0.1",
   "minAppVersion": "3.5.4",
   "backends": [

@@ -1,6 +1,6 @@
 # SiYuan Git Sync Plugin
 
-[中文](./README_zh_CN.md)
+[中文](https://github.com/Ceysen/siyuan-git-sync/blob/main/README_zh_CN.md)
 
 ## Project Introduction
 
@@ -27,7 +27,7 @@ SiYuan Git Sync is a Git synchronization plugin designed specifically for SiYuan
 
 ### Method 2: Manual Installation
 
-1. Download the latest `package.zip` file from [GitHub Releases](https://github.com/yourusername/siyuan-git-sync/releases)
+1. Download the latest `package.zip` file from [GitHub Releases](https://github.com/Ceysen/siyuan-git-sync/releases)
 2. Extract the downloaded file to the SiYuan Notes plugin directory `{workspace}/data/plugins/`
 3. Restart SiYuan Notes
 4. Go to "Settings" → "Plugins" to enable the plugin
@@ -143,7 +143,7 @@ When you need to replace local files with versions from the repository:
 
 1. Clone the project to local
    ```bash
-   git clone https://github.com/Ceysen/Siyuan-Git-Sync.git
+   git clone https://github.com/Ceysen/siyuan-git-sync.git
    cd siyuan-git-sync
    ```
 
@@ -181,12 +181,12 @@ Welcome to submit Issues and Pull Requests to help improve this plugin!
 
 ## License
 
-This project adopts the [MIT License](./LICENSE) open source agreement.
+This project adopts the [MIT License](https://github.com/Ceysen/siyuan-git-sync/blob/main/LICENSE) open source agreement.
 
 ## Contact Information
 
-- GitHub: [Ceysen/siyuan-git-sync](https://github.com/Ceysen/Siyuan-Git-Sync.git)
-- Issue Feedback: [Issues](https://github.com/Ceysen/Siyuan-Git-Sync/issues)
+- GitHub: [Ceysen/siyuan-git-sync](https://github.com/Ceysen/siyuan-git-sync.git)
+- Issue Feedback: [Issues](https://github.com/Ceysen/siyuan-git-sync/issues)
 
 ---
 

@@ -1,6 +1,6 @@
 # SiYuan Git Sync 插件
 
-[English](./README.md)
+[English](https://github.com/Ceysen/siyuan-git-sync/blob/main/README.md)
 
 ## 项目简介
 
@@ -27,7 +27,7 @@ SiYuan Git Sync 是一个专为思源笔记设计的 Git 同步插件，支持�
 
 ### 方法二：手动安装
 
-1. 从 [GitHub Releases](https://github.com/yourusername/siyuan-git-sync/releases) 下载最新的 `package.zip` 文件
+1. 从 [GitHub Releases](https://github.com/Ceysen/siyuan-git-sync/releases) 下载最新的 `package.zip` 文件
 2. 将下载的文件解压到思源笔记的插件目录 `{workspace}/data/plugins/`
 3. 重启思源笔记
 4. 进入「设置」→「插件」启用该插件
@@ -143,7 +143,7 @@ SiYuan Git Sync 是一个专为思源笔记设计的 Git 同步插件，支持�
 
 1. 克隆项目到本地
    ```bash
-   git clone https://github.com/Ceysen/Siyuan-Git-Sync.git
+   git clone https://github.com/Ceysen/siyuan-git-sync.git
    cd siyuan-git-sync
    ```
 
@@ -181,12 +181,12 @@ SiYuan Git Sync 是一个专为思源笔记设计的 Git 同步插件，支持�
 
 ## 许可证
 
-本项目采用 [MIT License](./LICENSE) 开源协议。
+本项目采用 [MIT License](https://github.com/Ceysen/siyuan-git-sync/blob/main/LICENSE) 开源协议。
 
 ## 联系方式
 
-- GitHub: [Ceysen/siyuan-git-sync](https://github.com/Ceysen/Siyuan-Git-Sync.git)
-- 问题反馈：[Issues](https://github.com/Ceysen/Siyuan-Git-Sync/issues)
+- GitHub: [Ceysen/siyuan-git-sync](https://github.com/Ceysen/siyuan-git-sync.git)
+- 问题反馈：[Issues](https://github.com/Ceysen/siyuan-git-sync/issues)
 
 ---
 
