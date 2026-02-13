@@ -342,8 +342,13 @@ export default class PluginSample extends Plugin {
         console.log(this.i18n.banPlugin);
     }
 
-    uninstall() {
-
+    async uninstall() {
+        // 删除插件保存的配置文件
+        try {
+            await this.removeData('gitSyncConfig');
+        } catch (error) {
+            console.error('Error removing gitSyncConfig:', error);
+        }
     }
 
     async updateCards(options: ICardData) {
