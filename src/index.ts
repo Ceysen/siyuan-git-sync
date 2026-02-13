@@ -348,6 +348,7 @@ export default class PluginSample extends Plugin {
             await this.removeData('gitSyncConfig');
         } catch (error) {
             console.error('Error removing gitSyncConfig:', error);
+            showMessage('Error removing gitSyncConfig:', error);
         }
     }
 
