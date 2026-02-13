@@ -30,5 +30,6 @@
   "keywords": [
     "github",
     "备份"
-  ]
+  ],
+  "disabledInPublish": true
 }
