@@ -3,7 +3,6 @@ import {
     showMessage,
     confirm,
     Dialog,
-    adaptHotkey,
     getFrontend,
     Protyle,
     Constants,
@@ -15,11 +14,17 @@ import {
 import "./index.scss";
 import { IMenuItem } from "siyuan/types";
 
+// 扩展Window接口，添加autoSyncTimer属性
+declare global {
+    interface Window {
+        autoSyncTimer: NodeJS.Timeout | null;
+    }
+}
+
 
 import { SettingUtils } from "./libs/setting-utils";
 import { GitConfigDialog } from "@/components/GitConfigDialog";
 const STORAGE_NAME = "menu-config";
-const DOCK_TYPE = "dock_tab";
 
 export default class PluginSample extends Plugin {
 
@@ -291,6 +296,11 @@ export default class PluginSample extends Plugin {
 
     async onunload() {
         console.log(this.i18n.banPlugin);
+        // 清理自动同步定时器
+        if (window.autoSyncTimer) {
+            clearInterval(window.autoSyncTimer);
+            window.autoSyncTimer = null;
+        }
     }
 
     async uninstall() {
