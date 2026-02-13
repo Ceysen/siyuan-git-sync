@@ -1,4 +1,5 @@
 {
+    "addTopBarIcon": "Git Sync Config",
     "helloPlugin": "The siyuan-git-sync plugin has been enabled.",
     "byePlugin": "The siyuan-git-sync plugin has been disabled."
 }
